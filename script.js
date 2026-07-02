@@ -30,51 +30,56 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Active Link Scrollspy Logic
+  // --- Unified 60FPS Scroll Handler ---
   const sections = document.querySelectorAll("section[id], footer[id]");
-  window.addEventListener("scroll", () => {
+  const siteHeader = document.getElementById("siteHeader");
+  const backToTop = document.getElementById("backToTop");
+  
+  let isScrolling = false;
+
+  const handleScroll = () => {
+    const scrollY = window.scrollY;
+
+    // Sticky header
+    if (siteHeader) {
+      if (scrollY > 50) siteHeader.classList.add("scrolled");
+      else siteHeader.classList.remove("scrolled");
+    }
+
+    // Back to top button
+    if (backToTop) {
+      if (scrollY > 300) backToTop.classList.add("visible");
+      else backToTop.classList.remove("visible");
+    }
+
+    // Scrollspy
     let current = "";
-    
     sections.forEach((section) => {
       const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
-      if (window.scrollY >= sectionTop - 150) {
+      if (scrollY >= sectionTop - 150) {
         current = section.getAttribute("id");
       }
     });
-    
+
     navLinks.forEach((link) => {
       link.classList.remove("active");
       if (link.getAttribute("href") === `#${current}`) {
         link.classList.add("active");
       }
     });
-  });
 
+    isScrolling = false;
+  };
 
-  // 3. Sticky Header scroll effect
-  const siteHeader = document.getElementById("siteHeader");
-  if (siteHeader) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 50) {
-        siteHeader.classList.add("scrolled");
-      } else {
-        siteHeader.classList.remove("scrolled");
-      }
-    });
-  }
+  window.addEventListener("scroll", () => {
+    if (!isScrolling) {
+      window.requestAnimationFrame(handleScroll);
+      isScrolling = true;
+    }
+  }, { passive: true });
 
-  // 4. Back to Top Button visibility and smooth scroll
-  const backToTop = document.getElementById("backToTop");
+  // Back to Top Button Click
   if (backToTop) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) {
-        backToTop.classList.add("visible");
-      } else {
-        backToTop.classList.remove("visible");
-      }
-    });
-
     backToTop.addEventListener("click", () => {
       window.scrollTo({
         top: 0,

@@ -191,6 +191,7 @@ button { font-family: inherit; cursor: pointer; }
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border-bottom: 1px solid var(--border);
   transition: all 0.3s ease;
+  will-change: transform, box-shadow, background-color;
 }
 .site-header.scrolled { box-shadow: var(--shadow-sm); background: rgba(255, 255, 255, 0.98); }
 
@@ -481,6 +482,7 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 0.92rem;
   overflow: hidden;
   transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+  will-change: transform, box-shadow;
 }
 .gallery-item::after {
   content: '';
@@ -696,10 +698,14 @@ button { font-family: inherit; cursor: pointer; }
 
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity .7s var(--ease), transform .7s var(--ease);
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
-.reveal.in-view { opacity: 1; transform: translateY(0); }
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* stagger children within grids automatically via JS-added delay style */
 
